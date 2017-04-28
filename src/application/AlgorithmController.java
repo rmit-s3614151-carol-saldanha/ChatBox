@@ -30,7 +30,10 @@ public class AlgorithmController {
 	@FXML
     private TextField name;
 	
-	FileHandle rsaFile = new FileHandle();
+	@FXML
+    private TextField ipAddress;
+	
+	FileHandle rsaFile = new FileHandle(ipAddress.getText());
 
 
 	public void onClickRSA(ActionEvent event) {

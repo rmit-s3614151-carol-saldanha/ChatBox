@@ -12,11 +12,17 @@ import java.util.Scanner;
 
 public class FileHandle {
 
+	private String ipAddress;
 	public FileHandle() {
 
 	}
 
 	
+	public FileHandle(String text) {
+		this.ipAddress = text;
+	}
+
+
 	public void writeToFile(String msg)
 	{
 		try{
@@ -31,7 +37,7 @@ public class FileHandle {
 	public String readFile()
 	{
 		try {
-			   URL url = new URL("http://10.0.0.1:8888/RSA.txt");
+			   URL url = new URL("http://"+ipAddress+":8888/RSA.txt");
 			   Scanner s = new Scanner(url.openStream());
 			  return  s.nextLine();
 			   // read from your scanner

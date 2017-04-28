@@ -13,6 +13,7 @@
       <TextArea fx:id="msgBox1" layoutX="93.0" layoutY="53.0" prefHeight="200.0" prefWidth="415.0" promptText="Senders Message" />
       <TextArea fx:id="msgBox2" layoutX="100.0" layoutY="349.0" prefHeight="200.0" prefWidth="415.0" promptText="Receivers message" />
       <Button layoutX="232.0" layoutY="559.0" mnemonicParsing="false" onAction="#onClickRead" text="Read new Message" />
-      <TextField fx:id="name" layoutX="217.0" layoutY="14.0" promptText="Enter your name" />
+      <TextField fx:id="name" layoutX="93.0" layoutY="14.0" promptText="Enter your name" />
+      <TextField fx:id="ipAddress" layoutX="337.0" layoutY="14.0" promptText="Enter IP Address" />
    </children>
 </AnchorPane>
