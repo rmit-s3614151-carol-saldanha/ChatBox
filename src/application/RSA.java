@@ -11,8 +11,9 @@ public class RSA extends Encryptor {
 	private int phi;
 	private int e;
 	private int d;
-	private String encryptedMessage = "RSA";
-
+	private String encryptedMessage = "RSA|";
+	private String depcryptedMessage = "New Message: ";
+	
 	public String getMessage() {
 		return message;
 	}
@@ -78,13 +79,21 @@ public class RSA extends Encryptor {
 	}
 
 	public RSA() {
+		System.out.println("Initializing..");
+
 		Utility utility = new Utility();
 		this.setP(11);
 		this.setQ(13);
 		this.setN(this.p * this.q);
 		this.setPhi((this.p - 1) * (this.q - 1));
-		this.setE(utility.findCoPrimeNumberLessThan(this.phi));
+		this.setE(49);
 		this.setD(this.computePrivateKey());
+		System.out.println(this);
+	}
+
+	@Override
+	public String toString() {
+		return "RSA [p=" + p + ", q=" + q + ", n=" + n + ", phi=" + phi + ", e=" + e + ", d=" + d + "]";
 	}
 
 	private int computePrivateKey() {
@@ -107,12 +116,50 @@ public class RSA extends Encryptor {
 	public void computeEncryptedMessage()
 	{
 		String message = this.message;
-		
+		System.out.println("Encrypting..");
+
 		for(int i = 0; i < message.length(); i++) {
-			this.encryptedMessage.concat(this.getEncryptedValue(message.charAt(i)));
-			this.encryptedMessage.concat("|");
+			this.encryptedMessage = this.encryptedMessage.concat(this.getEncryptedValue(message.charAt(i)));
+			this.encryptedMessage = this.encryptedMessage.concat("|");
+		}
+		this.encryptedMessage = this.encryptedMessage.concat("end");
+		
+	}
+	
+	public void decryptEncryptedMessage() 
+	{
+		String encryptedMessage = this.encryptedMessage.substring(4, this.encryptedMessage.length());
+		String part;
+		int position;
+		char depryptedChar;
+		Utility utility = new Utility();
+		System.out.println("Decrypting..");
+		
+		while(!encryptedMessage.equals("end")) {
+			part = "";
+			position=0;
+
+			while(encryptedMessage.charAt(position) != '|')
+			{
+				part = part.concat(Character.toString(encryptedMessage.charAt(position)));
+				position++;
+			}
+			encryptedMessage = encryptedMessage.substring(part.length() + 1, encryptedMessage.length());
+			
+			depryptedChar = (char) utility.moduloR(Integer.parseInt(part),this.d,this.n);
+			
+			this.depcryptedMessage =  this.depcryptedMessage.concat(Character.toString(depryptedChar));
 		}
 		
+		
+	}
+
+	public String getDepcryptedMessage() {
+		return depcryptedMessage;
+	}
+
+	public void setDepcryptedMessage(String depcryptedMessage) {
+		this.depcryptedMessage = depcryptedMessage;
 	}
 
 	private String getEncryptedValue(char character) {
