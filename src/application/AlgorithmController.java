@@ -33,7 +33,14 @@ public class AlgorithmController {
 	@FXML
     private TextField ipAddress;
 	
-	FileHandle rsaFile = new FileHandle(ipAddress.getText());
+	@FXML
+    private Button start;
+	
+	private FileHandle rsaFile = null;
+	
+	public void onClickStart(ActionEvent event) {
+		this.rsaFile= new FileHandle(ipAddress.getText());
+	}
 
 
 	public void onClickRSA(ActionEvent event) {
