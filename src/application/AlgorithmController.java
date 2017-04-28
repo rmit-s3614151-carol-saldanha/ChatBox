@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
 public class AlgorithmController {
 
@@ -25,6 +26,9 @@ public class AlgorithmController {
 
 	@FXML
 	private TextArea msgBox2;
+	
+	@FXML
+    private TextField name;
 	
 	FileHandle rsaFile = new FileHandle();
 
@@ -49,11 +53,12 @@ public class AlgorithmController {
 	
 	public void onClickRead(ActionEvent event) {
 		String encryptedMsg = rsaFile.readFile();
-		rsa.setDepcryptedMessage("New Message: ");
+		rsa.setDepcryptedMessage("");
 		rsa.setEncryptedMessage(encryptedMsg);
 		rsa.decryptEncryptedMessage();
 		System.out.println(rsa.getDepcryptedMessage());
-		msgBox2.setText(rsa.getDepcryptedMessage());
+		msgBox2.appendText("\n"+name.getText() +": "+ rsa.getDepcryptedMessage());
+		
 	}
 
 }

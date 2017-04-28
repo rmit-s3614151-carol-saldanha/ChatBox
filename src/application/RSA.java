@@ -12,7 +12,7 @@ public class RSA extends Encryptor {
 	private int e;
 	private int d;
 	private String encryptedMessage = "RSA|";
-	private String depcryptedMessage = "New Message: ";
+	private String depcryptedMessage = "";
 	
 	public String getMessage() {
 		return message;
