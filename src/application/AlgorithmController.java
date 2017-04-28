@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 
 public class AlgorithmController {
 
@@ -15,8 +16,12 @@ public class AlgorithmController {
 	@FXML
 	private Button RSA;
 
+	
 	@FXML
 	private Button Paillier;
+	
+	@FXML
+	private Label label;
 
 	@FXML
 	private Button elgamal;
@@ -36,10 +41,31 @@ public class AlgorithmController {
 	@FXML
     private Button start;
 	
+	@FXML
+	private Button readNewMsg;
+	
 	private FileHandle rsaFile = null;
 	
+	
 	public void onClickStart(ActionEvent event) {
+		if(name.getText().isEmpty() || ipAddress.getText().isEmpty())
+		{
+			//start.setDisable(true);
+			RSA.setDisable(true);
+			Paillier.setDisable(true);
+			elgamal.setDisable(true);
+			readNewMsg.setDisable(true);
+			label.setText("Enter your name and the Ip Address of the person you want to chat with");
+		}
+		else
+		{
+			//start.setDisable(false);
+			RSA.setDisable(false);
+			Paillier.setDisable(false);
+			elgamal.setDisable(false);
+			readNewMsg.setDisable(false);
 		this.rsaFile= new FileHandle(ipAddress.getText());
+		}
 	}
 
 
@@ -70,5 +96,7 @@ public class AlgorithmController {
 		msgBox2.appendText("\n" + rsa.getDepcryptedMessage());
 		
 	}
+
+
 
 }
