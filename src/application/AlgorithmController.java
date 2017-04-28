@@ -18,11 +18,17 @@ public class AlgorithmController {
 	    private Button elgamal;
 
 	    @FXML
-	    private TextArea msgBox;
+	    private TextArea msgBox1;
 
-	
-	public void onClickRSA(ActionEvent event) {
-		System.out.println("RSA");
+	    @FXML
+	    private TextArea msgBox2;
+	    
+	    public void onClickRSA(ActionEvent event) {
+	    RSA rsa = new RSA();
+	    rsa.setMessage(msgBox1.getText());
+	    rsa.computeEncryptedMessage();
+	    msgBox2.setText(rsa.getEncryptedMessage());;
+	    System.out.println(rsa.getEncryptedMessage());
 	}
 
 	public void onClickPaillier(ActionEvent event) {
