@@ -27,7 +27,7 @@ public class AlgorithmController {
 	    RSA rsa = new RSA();
 	    rsa.setMessage(msgBox1.getText());
 	    rsa.computeEncryptedMessage();
-	    msgBox2.setText(rsa.getEncryptedMessage());;
+	    msgBox2.setText(rsa.getEncryptedMessage());
 	    System.out.println(rsa.getEncryptedMessage());
 	}
 
