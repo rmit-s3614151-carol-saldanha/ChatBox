@@ -1,42 +1,59 @@
 package application;
 
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 
-
 public class AlgorithmController {
 
-		@FXML
-	    private Button RSA;
+	private RSA rsa = new RSA();
 
-	    @FXML
-	    private Button Paillier;
+	@FXML
+	private Button RSA;
 
-	    @FXML
-	    private Button elgamal;
+	@FXML
+	private Button Paillier;
 
-	    @FXML
-	    private TextArea msgBox1;
+	@FXML
+	private Button elgamal;
 
-	    @FXML
-	    private TextArea msgBox2;
-	    
-	    public void onClickRSA(ActionEvent event) {
-	    RSA rsa = new RSA();
-	    rsa.setMessage(msgBox1.getText());
-	    rsa.computeEncryptedMessage();
-	    msgBox2.setText(rsa.getEncryptedMessage());
-	    System.out.println(rsa.getEncryptedMessage());
+	@FXML
+	private TextArea msgBox1;
+
+	@FXML
+	private TextArea msgBox2;
+	
+	FileHandle rsaFile = new FileHandle();
+
+
+	public void onClickRSA(ActionEvent event) {
+		rsa.setMessage(msgBox1.getText());
+		rsa.setEncryptedMessage("RSA|");
+		rsa.computeEncryptedMessage();
+		System.out.println("New message: "+rsa.getEncryptedMessage());
+			rsaFile.writeToFile(rsa.getEncryptedMessage());
+		
 	}
 
 	public void onClickPaillier(ActionEvent event) {
 		System.out.println("Paillier");
 	}
-	
+
 	public void onClickElegmal(ActionEvent event) {
 		System.out.println("Elegmal");
+	}
+	
+	
+	public void onClickRead(ActionEvent event) {
+		String encryptedMsg = rsaFile.readFile();
+		rsa.setDepcryptedMessage("New Message: ");
+		rsa.setEncryptedMessage(encryptedMsg);
+		rsa.decryptEncryptedMessage();
+		System.out.println(rsa.getDepcryptedMessage());
+		msgBox2.setText(rsa.getDepcryptedMessage());
 	}
 
 }
