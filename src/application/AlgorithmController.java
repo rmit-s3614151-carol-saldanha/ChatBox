@@ -34,7 +34,7 @@ public class AlgorithmController {
 
 
 	public void onClickRSA(ActionEvent event) {
-		rsa.setMessage(msgBox1.getText());
+		rsa.setMessage(name.getText()+": "+msgBox1.getText());
 		rsa.setEncryptedMessage("RSA|");
 		rsa.computeEncryptedMessage();
 		System.out.println("New message: "+rsa.getEncryptedMessage());
@@ -57,7 +57,7 @@ public class AlgorithmController {
 		rsa.setEncryptedMessage(encryptedMsg);
 		rsa.decryptEncryptedMessage();
 		System.out.println(rsa.getDepcryptedMessage());
-		msgBox2.appendText("\n"+name.getText() +": "+ rsa.getDepcryptedMessage());
+		msgBox2.appendText("\n" + rsa.getDepcryptedMessage());
 		
 	}
 
