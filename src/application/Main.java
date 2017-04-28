@@ -1,24 +1,35 @@
 package application;
 
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javafx.scene.Parent;
+import javafx.fxml.FXMLLoader;
+
 
 public class Main extends Application {
 	@Override // Override the start method from the superclass
 	  public void start(Stage primaryStage) {
-	  // Create a scene with a single Button - button events are not handled at this stage
-	     Button btOK = new Button("Click me");
-	     Scene scene = new Scene(btOK, 200, 250);
-	     primaryStage.setTitle("MyJavaFX"); // Set the stage title
-	     primaryStage.setScene(scene); // Place the scene in the stage
-	     primaryStage.show(); // Display the stage
+try {
+			Parent root = FXMLLoader.load(getClass().getResource("/application/ChatBox.fxml"));
+			Scene scene = new Scene(root);
+			primaryStage.setScene(scene);
+			primaryStage.setTitle("Cryptosystem");
+			primaryStage.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	  
 	  }
 	 /**
 	   * The main method is not needed for running from the command line.
 	 */ 
+	   
 	    public static void main(String[] args) {
-	       Application.launch(args);
+	       launch(args);
 	    }
 }

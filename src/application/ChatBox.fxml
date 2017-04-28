@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600" prefWidth="600" style="-fx-background-color: #99ff99;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AlgorithmController">
+   <children>
+      <Button fx:id="RSA" layoutX="80.0" layoutY="287.0" mnemonicParsing="false" onAction="#onClickRSA" text="RSA" />
+      <Button fx:id="Paillier" layoutX="278.0" layoutY="287.0" mnemonicParsing="false" onAction="#onClickPaillier" text="Paillier" />
+      <Button fx:id="elgamal" layoutX="470.0" layoutY="287.0" mnemonicParsing="false" onAction="#onClickElegmal" text="elgamal" />
+      <TextArea fx:id="msgBox2" layoutX="93.0" layoutY="53.0" prefHeight="200.0" prefWidth="415.0" promptText="Senders Message" />
+      <TextArea fx:id="msgBox1" layoutX="100.0" layoutY="349.0" prefHeight="200.0" prefWidth="415.0" promptText="Receivers message" />
+   </children>
+</AnchorPane>
