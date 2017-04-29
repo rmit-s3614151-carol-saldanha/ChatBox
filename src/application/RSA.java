@@ -95,7 +95,6 @@ public class RSA extends Encryptor {
 		int p=utility.findPrimeFactor(n);
 		int q = n/p;
 		int phi = (p-1)*(q-1);
-		System.out.println("Prime Factors are "+p+", "+q);
 		boolean isRemainderOne = false;
 		while (!isRemainderOne) {
 
@@ -108,7 +107,6 @@ public class RSA extends Encryptor {
 		
 		this.setD(privateKey);
 		this.setN(n);
-		System.out.println("Niraj's key" + this.d);
 	}
 	
 	private void initialize() {
@@ -118,7 +116,6 @@ public class RSA extends Encryptor {
 		boolean isDAppropriate = false;
 		while (!isDAppropriate) {
 			arePrime = false;
-			System.out.println("Finding Primes..");
 			while (!arePrime) {
 				this.p = random.nextInt(MAXIMUM_PRIME_VALUE-2) + 2;
 				this.q = random.nextInt(MAXIMUM_PRIME_VALUE-2) + 2;
@@ -143,10 +140,9 @@ public class RSA extends Encryptor {
 			this.setPhi((this.p - 1) * (this.q - 1));
 			this.setE(utility.findCoPrimeNumberLessThan(phi));
 
-			System.out.println("Finding private key..");
 
 			isDAppropriate = this.computePrivateKey();
-			;
+			
 			if (!isDAppropriate) {
 				System.out.println(this);
 				System.out.println("private key Value too high");

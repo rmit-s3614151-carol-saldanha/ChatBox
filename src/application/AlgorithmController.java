@@ -63,7 +63,8 @@ public class AlgorithmController {
 
 		} else {
 			this.rsaFile = new FileHandle(ipAddress.getText());
-
+			rsaFile.writeToFile("RSA.txt", "empty");
+			rsaFile.writeToFile("ACK.txt", "empty");
 			establishConnection();
 
 			enableChat();
@@ -83,14 +84,10 @@ public class AlgorithmController {
 
 		while (rsaFile.readFile("RSA.txt") != null) {
 			key = rsaFile.readFile("RSA.txt"); // READ KEY FROM FILE
-			System.out.println("key is  "+key);
 			if (key.contains("key")) {
-				System.out.println("Comupting");
 
 				computeEandN(key);
-				System.out.println("Comupted");
 				rsa.computePrivateKey(this.n, this.e);
-				System.out.println("Comupted 2");
 
 				rsaFile.writeToFile("ACK.txt", "ACK"); // ACK KEY RECEIVED
 				System.out.println("Key received, acknowledgement sent..");
