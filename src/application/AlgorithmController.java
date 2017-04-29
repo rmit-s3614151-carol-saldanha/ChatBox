@@ -56,15 +56,19 @@ public class AlgorithmController {
 		label.setText("Enter your name and the Ip Address of the person you want to chat with");
 
 	}
-
+	public void onClickExit(ActionEvent event) {
+		FileHandle exit = new FileHandle();
+		exit.writeToFile("RSA.txt", "empty");
+		exit.writeToFile("ACK.txt", "empty");
+		System.exit(0);
+	}
 	public void onClickStart(ActionEvent event) {
 		if (name.getText().isEmpty() || ipAddress.getText().isEmpty()) {
 			validate();
 
 		} else {
 			this.rsaFile = new FileHandle(ipAddress.getText());
-			rsaFile.writeToFile("RSA.txt", "empty");
-			rsaFile.writeToFile("ACK.txt", "empty");
+			
 			establishConnection();
 
 			enableChat();
