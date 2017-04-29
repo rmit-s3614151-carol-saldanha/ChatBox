@@ -95,8 +95,8 @@ public class RSA extends Encryptor {
 			
 			System.out.println("Finding Primes..");
 			while(!arePrime) {
-			this.p = random.nextInt(30);
-			this.q = random.nextInt(30);
+			this.p = random.nextInt(100);
+			this.q = random.nextInt(100);
 			arePrime = true;
 				for(int i = 2; i< this.p/2 ;  i++) {
 					if(this.p % i == 0)arePrime = false;
