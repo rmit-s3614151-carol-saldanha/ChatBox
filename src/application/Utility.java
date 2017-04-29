@@ -39,22 +39,27 @@ public class Utility {
 		int p = 2;
 		boolean isPrimeFactor = false;
 		while (!isPrimeFactor) {
+
 			if (n % p == 0)
+				{
 				isPrimeFactor = true;
+				break;
+				}
+			else
 			p = findNextPrimeNumber(p);
+			
 		}
 
-		return 0;
+		return p;
 	}
 
 	public int findNextPrimeNumber(int p) {
 
 		int nextP = p;
-
 		do {
-			nextP = nextP++;
+			nextP++;
 
-		} while (isPrime(nextP));
+		} while (!isPrime(nextP));
 
 		return nextP;
 	}
