@@ -13,7 +13,7 @@ public class RSA extends Encryptor {
 	private int d;
 	private String encryptedMessage = "RSA|";
 	private String depcryptedMessage = "";
-	private final int MAXIMUM_PRIME_VALUE = 1000;
+	private final int MAXIMUM_PRIME_VALUE = 500;
 	private final int MAXIMUM_PRIVATE_KEY = 10000;
 	private final int ASCII_VALUE_COUNT = 127;
 

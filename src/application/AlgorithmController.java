@@ -69,7 +69,6 @@ public class AlgorithmController {
 	}
 
 	public void onClickRSA(ActionEvent event) {
-<<<<<<< HEAD
 		if (name.getText().isEmpty() || ipAddress.getText().isEmpty()) {
 			validate();
 
@@ -78,11 +77,9 @@ public class AlgorithmController {
 			rsa.setEncryptedMessage("RSA|");
 			rsa.computeEncryptedMessage();
 			System.out.println("New message: " + rsa.getEncryptedMessage());
-=======
 		rsa.setMessage(name.getText()+": "+msgBox1.getText());
 		rsa.computeEncryptedMessage();
 		System.out.println("New message: "+rsa.getEncryptedMessage());
->>>>>>> origin/master
 			rsaFile.writeToFile(rsa.getEncryptedMessage());
 		}
 
@@ -97,10 +94,8 @@ public class AlgorithmController {
 	}
 
 	public void onClickRead(ActionEvent event) {
-<<<<<<< HEAD
 		if (name.getText().isEmpty() || ipAddress.getText().isEmpty()) {
 			validate();
-=======
 		String encryptedMsg = rsaFile.readFile();
 		rsa.setEncryptedMessage(encryptedMsg);
 		rsa.decryptEncryptedMessage();
@@ -108,9 +103,8 @@ public class AlgorithmController {
 		msgBox2.appendText("\n" + rsa.getDepcryptedMessage());
 		
 	}
->>>>>>> origin/master
 
-		} else {
+		else {
 
 			String encryptedMsg = rsaFile.readFile();
 			rsa.setDepcryptedMessage("");
