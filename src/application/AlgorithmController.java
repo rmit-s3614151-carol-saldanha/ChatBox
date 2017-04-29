@@ -1,5 +1,8 @@
 package application;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -42,7 +45,13 @@ public class AlgorithmController {
 	private Button readNewMsg;
 
 	private FileHandle rsaFile = null;
-
+	
+	private String publicKey ="";
+	
+	private String n;
+	
+	private String e;
+	
 	public void validate() {
 
 		
@@ -59,13 +68,38 @@ public class AlgorithmController {
 			validate();
 
 		} else {
-			
+			System.out.println("Establishing Connection");
 			RSA.setDisable(false);
 			Paillier.setDisable(false);
 			elgamal.setDisable(false);
 			readNewMsg.setDisable(false);
 			this.rsaFile = new FileHandle(ipAddress.getText());
-		}
+			e = Integer.toString(rsa.getE());
+			n= Integer.toString(rsa.getN());
+			publicKey = "key" + "|" + e +"|"+n;
+			rsaFile.writeToFile(publicKey);
+			
+			String key;
+			while(rsaFile.readFile("RSA.txt")!= null){
+				key= rsaFile.readFile("RSA.txt");
+				if(key.substring(0, 3).contains("key")){
+					System.out.println("Acknowledge key recieved..");
+				}
+				else
+				{
+					System.out.println("Key validation failed");
+				}
+				
+			}
+			
+			
+			}
+
+
+			
+	
+		
+	    
 	}
 
 	public void onClickRSA(ActionEvent event) {
@@ -96,7 +130,7 @@ public class AlgorithmController {
 	public void onClickRead(ActionEvent event) {
 		if (name.getText().isEmpty() || ipAddress.getText().isEmpty()) {
 			validate();
-		String encryptedMsg = rsaFile.readFile();
+		String encryptedMsg = rsaFile.readFile("RSA.txt");
 		rsa.setEncryptedMessage(encryptedMsg);
 		rsa.decryptEncryptedMessage();
 		System.out.println(rsa.getDepcryptedMessage());
@@ -106,7 +140,7 @@ public class AlgorithmController {
 
 		else {
 
-			String encryptedMsg = rsaFile.readFile();
+			String encryptedMsg = rsaFile.readFile("RSA.txt");
 			rsa.setDepcryptedMessage("");
 			rsa.setEncryptedMessage(encryptedMsg);
 			rsa.decryptEncryptedMessage();

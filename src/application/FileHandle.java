@@ -34,10 +34,10 @@ public class FileHandle {
 		}
 	}
 	
-	public String readFile()
+	public String readFile(String filename)
 	{
 		try {
-			   URL url = new URL("http://"+ipAddress+":8888/RSA.txt");
+			   URL url = new URL("http://"+ipAddress+":8888/+filename");
 			   Scanner s = new Scanner(url.openStream());
 			  return  s.nextLine();
 			   // read from your scanner
