@@ -107,6 +107,7 @@ public class RSA extends Encryptor {
 		}
 		
 		this.setD(privateKey);
+		this.setN(n);
 		System.out.println("Niraj's key" + this.d);
 	}
 	
@@ -200,7 +201,7 @@ public class RSA extends Encryptor {
 		char depryptedChar;
 		Utility utility = new Utility();
 		System.out.println("Decrypting..");
-
+		System.out.println("d "+d+"n "+n);
 		while (!encryptedMessage.equals("end")) {
 			part = "";
 			position = 0;

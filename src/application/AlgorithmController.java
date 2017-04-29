@@ -175,25 +175,15 @@ public class AlgorithmController {
 	}
 
 	public void onClickRead(ActionEvent event) {
-		if (name.getText().isEmpty() || ipAddress.getText().isEmpty()) {
-			validate();
+		
 			String encryptedMsg = rsaFile.readFile("RSA.txt");
-			rsa.setEncryptedMessage(encryptedMsg);
-			rsa.decryptEncryptedMessage();
-			System.out.println(rsa.getDepcryptedMessage());
-			msgBox2.appendText("\n" + rsa.getDepcryptedMessage());
-
-		}
-
-		else {
-
-			String encryptedMsg = rsaFile.readFile("RSA.txt");
+			System.out.println(encryptedMsg);
 			rsa.setDepcryptedMessage("");
 			rsa.setEncryptedMessage(encryptedMsg);
 			rsa.decryptEncryptedMessage();
 			System.out.println(rsa.getDepcryptedMessage());
 			msgBox2.appendText("\n" + rsa.getDepcryptedMessage());
-		}
+		
 	}
 
 }
