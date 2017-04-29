@@ -13,7 +13,7 @@ public class RSA extends Encryptor {
 	private int d;
 	private String encryptedMessage = "RSA|";
 	private String depcryptedMessage = "";
-	private final int MAXIMUM_PRIME_VALUE = 500;
+	private final int MAXIMUM_PRIME_VALUE = 200;
 	private final int MAXIMUM_PRIVATE_KEY = 10000;
 	private final int ASCII_VALUE_COUNT = 127;
 
@@ -88,6 +88,27 @@ public class RSA extends Encryptor {
 		System.out.println(this);
 	}
 
+	public void computePrivateKey(int n, int e)
+	{
+		Utility utility = new Utility();
+		int privateKey = 2;
+		int p=utility.findPrimeFactor(n);
+		int q = n/p;
+		int phi = (p-1)*(q-1);
+		
+		boolean isRemainderOne = false;
+		while (!isRemainderOne) {
+
+			if ((privateKey * e) % phi == 1) {
+				isRemainderOne = true;
+			} else {
+				privateKey++;
+			}
+		}
+		
+		this.setD(privateKey);
+	}
+	
 	private void initialize() {
 		Random random = new Random();
 		boolean arePrime;
