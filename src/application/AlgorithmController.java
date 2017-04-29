@@ -139,7 +139,7 @@ public class AlgorithmController {
 		String n;
 		String e;
 		e = Integer.toString(rsa.getE());
-		n = Integer.toString(rsa.getN());
+		n = Integer.toString(rsa.getnEncryption() );
 		String publicKey = "key" + "|" + e + "|" + n;
 		rsaFile.writeToFile("RSA.txt", publicKey); // WRITE KEY TO FILE
 

@@ -7,7 +7,8 @@ public class RSA extends Encryptor {
 	private String message;
 	private int p;
 	private int q;
-	private int n;
+	private int nEncryption;
+	private int nDecryption;
 	private int phi;
 	private int e;
 	private int d;
@@ -41,12 +42,20 @@ public class RSA extends Encryptor {
 		this.q = q;
 	}
 
-	public int getN() {
-		return n;
+	public int getnEncryption() {
+		return nEncryption;
 	}
 
-	public void setN(int n) {
-		this.n = n;
+	public void setnEncryption(int nEncryption) {
+		this.nEncryption = nEncryption;
+	}
+
+	public int getnDecryption() {
+		return nDecryption;
+	}
+
+	public void setnDecryption(int nDecryption) {
+		this.nDecryption = nDecryption;
 	}
 
 	public int getPhi() {
@@ -106,8 +115,8 @@ public class RSA extends Encryptor {
 		}
 		
 		this.setD(privateKey);
-		this.setN(n);
-		System.out.println("Computed private key and N"+this.d +" "+ this.n);
+		this.setnDecryption(n);
+		System.out.println("Computed private key and N"+this.d +" "+ this.nDecryption);
 	}
 	
 	private void initialize() {
@@ -131,9 +140,9 @@ public class RSA extends Encryptor {
 				}
 				if (p == q)
 					arePrime = false;
-				this.setN(this.p * this.q);
+				this.setnEncryption(this.p * this.q);
 
-				if (this.getN() <= ASCII_VALUE_COUNT)
+				if (this.getnEncryption() <= ASCII_VALUE_COUNT)
 					arePrime = false;
 			}
 			System.out.println("p: " + p + " q: " + q);
@@ -152,9 +161,14 @@ public class RSA extends Encryptor {
 		}
 	}
 
+	
+
 	@Override
 	public String toString() {
-		return "RSA [p=" + p + ", q=" + q + ", n=" + n + ", phi=" + phi + ", e=" + e + ", d=" + d + "]";
+		return "RSA [message=" + message + ", p=" + p + ", q=" + q + ", nEncryption=" + nEncryption + ", nDecryption="
+				+ nDecryption + ", phi=" + phi + ", e=" + e + ", d=" + d + ", encryptedMessage=" + encryptedMessage
+				+ ", depcryptedMessage=" + depcryptedMessage + ", MAXIMUM_PRIME_VALUE=" + MAXIMUM_PRIME_VALUE
+				+ ", MAXIMUM_PRIVATE_KEY=" + MAXIMUM_PRIVATE_KEY + ", ASCII_VALUE_COUNT=" + ASCII_VALUE_COUNT + "]";
 	}
 
 	private boolean computePrivateKey() {
@@ -198,18 +212,18 @@ public class RSA extends Encryptor {
 		char depryptedChar;
 		Utility utility = new Utility();
 		System.out.println("Decrypting..");
-		System.out.println("d "+d+"n "+n);
+		System.out.println("d "+d+" n "+ this.nDecryption);
 		while (!encryptedMessage.equals("end")) {
 			part = "";
 			position = 0;
-
 			while (encryptedMessage.charAt(position) != '|') {
 				part = part.concat(Character.toString(encryptedMessage.charAt(position)));
+
 				position++;
 			}
 			encryptedMessage = encryptedMessage.substring(part.length() + 1, encryptedMessage.length());
 
-			depryptedChar = (char) utility.moduloR(Integer.parseInt(part), this.d, this.n);
+			depryptedChar = (char) utility.moduloR(Integer.parseInt(part), this.d, this.nDecryption);
 
 			this.depcryptedMessage = this.depcryptedMessage.concat(Character.toString(depryptedChar));
 		}
@@ -228,7 +242,7 @@ public class RSA extends Encryptor {
 
 		int asciiValue = (int) character;
 		Utility utility = new Utility();
-		return Integer.toString(utility.moduloR(asciiValue, this.e, this.n));
+		return Integer.toString(utility.moduloR(asciiValue, this.e, this.nEncryption));
 	}
 
 }
