@@ -46,7 +46,6 @@ public class AlgorithmController {
 
 	private FileHandle rsaFile = null;
 
-
 	public void validate() {
 
 		RSA.setDisable(true);
@@ -63,36 +62,41 @@ public class AlgorithmController {
 
 		} else {
 			this.rsaFile = new FileHandle(ipAddress.getText());
-			
+
 			establishConnection();
-			
+
 			enableChat();
-			
+
 		}
 	}
 
 	private void establishConnection() {
 		System.out.println("Establishing Connection");
 
-		writePublicKey();    //WRITE KEY FOR PUBLIC
-		
-		String key; 
-		String ack; 
+		writePublicKey(); // WRITE KEY FOR PUBLIC
+
+		String key;
+		String ack;
 
 		while (rsaFile.readFile("RSA.txt") != null) {
-			key = rsaFile.readFile("RSA.txt"); 			//READ KEY FROM FILE
+			key = rsaFile.readFile("RSA.txt"); // READ KEY FROM FILE
+			System.out.println("Acknowledging connection..");
+
 			if (key.contains("key")) {
-				System.out.println("Acknowledging connection..");
-				rsaFile.writeToFile("ACK.txt","ACK");	//ACK KEY RECEIVED
-			} 
-		}	
-		
+				rsaFile.writeToFile("ACK.txt", "ACK"); // ACK KEY RECEIVED
+				System.out.println("Connection Acknowledged..");
+
+				break;
+			}
+		}
+
 		while (rsaFile.readFile("ACK.txt") != null) {
-			ack = rsaFile.readFile("ACK.txt"); 			
+			ack = rsaFile.readFile("ACK.txt");
 			if (ack.contains("ACK")) {
-				System.out.println("CONNECTION ESTABLISHED.."); //CONNECTION ESTABLISHED
-			} 
-		}	
+				System.out.println("CONNECTION ESTABLISHED.."); // CONNECTION ESTABLISHED
+				break;
+			}
+		}
 	}
 
 	private void writePublicKey() {
@@ -101,8 +105,8 @@ public class AlgorithmController {
 		e = Integer.toString(rsa.getE());
 		n = Integer.toString(rsa.getN());
 		String publicKey = "key" + "|" + e + "|" + n;
-		rsaFile.writeToFile("RSA.txt",publicKey); 		//WRITE KEY TO FILE
-		
+		rsaFile.writeToFile("RSA.txt", publicKey); // WRITE KEY TO FILE
+
 	}
 
 	private void enableChat() {
@@ -110,7 +114,7 @@ public class AlgorithmController {
 		RSA.setDisable(false);
 		Paillier.setDisable(false);
 		elgamal.setDisable(false);
-		readNewMsg.setDisable(false);		
+		readNewMsg.setDisable(false);
 	}
 
 	public void onClickRSA(ActionEvent event) {
@@ -125,7 +129,7 @@ public class AlgorithmController {
 			rsa.setMessage(name.getText() + ": " + msgBox1.getText());
 			rsa.computeEncryptedMessage();
 			System.out.println("New message: " + rsa.getEncryptedMessage());
-			rsaFile.writeToFile("RSA.txt",rsa.getEncryptedMessage());
+			rsaFile.writeToFile("RSA.txt", rsa.getEncryptedMessage());
 		}
 
 	}
