@@ -71,24 +71,27 @@ public class AlgorithmController {
 	}
 
 	private void establishConnection() {
-		System.out.println("Establishing Connection");
+		System.out.println("Establishing Connection..");
 
 		writePublicKey(); // WRITE KEY FOR PUBLIC
 
 		String key;
 		String ack;
 
+		System.out.println("Reading Public key..");
+
 		while (rsaFile.readFile("RSA.txt") != null) {
 			key = rsaFile.readFile("RSA.txt"); // READ KEY FROM FILE
-			System.out.println("Acknowledging connection..");
 
 			if (key.contains("key")) {
 				rsaFile.writeToFile("ACK.txt", "ACK"); // ACK KEY RECEIVED
-				System.out.println("Connection Acknowledged..");
+				System.out.println("Key received, acknowledgement sent..");
 
 				break;
 			}
 		}
+
+		System.out.println("Waiting for Acknowledgement..");
 
 		while (rsaFile.readFile("ACK.txt") != null) {
 			ack = rsaFile.readFile("ACK.txt");
