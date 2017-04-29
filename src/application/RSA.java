@@ -1,5 +1,6 @@
 package application;
 
+
 import java.util.Random;
 
 public class RSA extends Encryptor {
@@ -81,14 +82,48 @@ public class RSA extends Encryptor {
 	public RSA() {
 		System.out.println("Initializing..");
 
-		Utility utility = new Utility();
-		this.setP(11);
-		this.setQ(13);
-		this.setN(this.p * this.q);
-		this.setPhi((this.p - 1) * (this.q - 1));
-		this.setE(49);
-		this.setD(this.computePrivateKey());
+		this.initialize();
 		System.out.println(this);
+	}
+
+	private void initialize() {
+		Random random = new Random();
+		boolean arePrime = false;
+		Utility utility = new Utility();
+		boolean isDAppropriate = false;
+		while(!isDAppropriate) {
+			
+			System.out.println("Finding Primes..");
+			while(!arePrime) {
+			this.p = random.nextInt(30);
+			this.q = random.nextInt(30);
+			arePrime = true;
+				for(int i = 2; i< this.p/2 ;  i++) {
+					if(this.p % i == 0)arePrime = false;
+				}
+				for(int i = 2; i< this.q/2 ;  i++) {
+					if(this.q % i == 0) arePrime = false;
+				}
+				if (p == q) arePrime = false;
+				this.setN(this.p * this.q);
+
+				if (this.getN() < 127 ) arePrime = false;
+			}
+			System.out.println("p: "+ p +" q: "+q);
+			
+			this.setPhi((this.p - 1) * (this.q - 1));
+			this.setE(utility.findCoPrimeNumberLessThan(phi));
+			
+			System.out.println("Finding private key..");
+
+			isDAppropriate = this.computePrivateKey();
+;
+			if(!isDAppropriate) {
+				System.out.println(this);
+				System.out.println("private key Value too high");
+			}
+			
+		}
 	}
 
 	@Override
@@ -96,7 +131,7 @@ public class RSA extends Encryptor {
 		return "RSA [p=" + p + ", q=" + q + ", n=" + n + ", phi=" + phi + ", e=" + e + ", d=" + d + "]";
 	}
 
-	private int computePrivateKey() {
+	private boolean computePrivateKey() {
 
 		boolean isRemainderOne = false;
 		int d = 2;
@@ -107,14 +142,18 @@ public class RSA extends Encryptor {
 			}
 			else {
 				d++;
+				if (d>1000) return false;
 			}
 		}
-
-		return d;
+		
+		this.setD(d);
+		return true;
 	}
 	
 	public void computeEncryptedMessage()
 	{
+		this.setEncryptedMessage("RSA|");
+
 		String message = this.message;
 		System.out.println("Encrypting..");
 

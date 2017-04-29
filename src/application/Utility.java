@@ -22,12 +22,12 @@ public class Utility {
 		int e = 0;
 		boolean isCoprime = false;
 		Random random = new Random();
-		
+		System.out.println("Finding Relatively Prime number..");
 		while(!isCoprime)
 		{
 			e = random.nextInt(phi - 2) + 2;
 			isCoprime = true;
-			for(int i=phi-1; i>1; i++) {
+			for(int i=phi-1; i>1; i--) {
 				if((e % i == 0) && (phi % i == 0)) isCoprime = false;
 			}
 		}
