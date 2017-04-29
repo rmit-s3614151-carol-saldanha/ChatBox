@@ -161,9 +161,6 @@ public class AlgorithmController {
 			rsa.setEncryptedMessage("RSA|");
 			rsa.computeEncryptedMessage();
 			System.out.println("New message: " + rsa.getEncryptedMessage());
-			rsa.setMessage(name.getText() + ": " + msgBox1.getText());
-			rsa.computeEncryptedMessage();
-			System.out.println("New message: " + rsa.getEncryptedMessage());
 			rsaFile.writeToFile("RSA.txt", rsa.getEncryptedMessage());
 		}
 

@@ -95,7 +95,7 @@ public class RSA extends Encryptor {
 		int p=utility.findPrimeFactor(n);
 		int q = n/p;
 		int phi = (p-1)*(q-1);
-		System.out.println("Prime Factors are"+p+", "+q);
+		System.out.println("Prime Factors are "+p+", "+q);
 		boolean isRemainderOne = false;
 		while (!isRemainderOne) {
 
@@ -107,6 +107,7 @@ public class RSA extends Encryptor {
 		}
 		
 		this.setD(privateKey);
+		System.out.println("Niraj's key" + this.d);
 	}
 	
 	private void initialize() {
