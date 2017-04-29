@@ -23,10 +23,10 @@ public class FileHandle {
 	}
 
 
-	public void writeToFile(String msg)
+	public void writeToFile(String filename, String msg)
 	{
 		try{
-		    PrintWriter writer = new PrintWriter("/Applications/MAMP/htdocs/RSA.txt", "UTF-8");
+		    PrintWriter writer = new PrintWriter("/Applications/MAMP/htdocs/"+filename, "UTF-8");
 		    writer.write(msg);
 		    writer.close();
 		} catch (IOException e) {
@@ -37,7 +37,7 @@ public class FileHandle {
 	public String readFile(String filename)
 	{
 		try {
-			   URL url = new URL("http://"+ipAddress+":8888/+filename");
+			   URL url = new URL("http://"+ipAddress+":8888/"+filename);
 			   Scanner s = new Scanner(url.openStream());
 			  return  s.nextLine();
 			   // read from your scanner
