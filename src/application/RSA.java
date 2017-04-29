@@ -13,7 +13,10 @@ public class RSA extends Encryptor {
 	private int d;
 	private String encryptedMessage = "RSA|";
 	private String depcryptedMessage = "";
-	
+	private final int MAXIMUM_PRIME_VALUE = 1000;
+	private final int MAXIMUM_PRIVATE_KEY = 10000;
+	private final int ASCII_VALUE_COUNT = 127;
+
 	public String getMessage() {
 		return message;
 	}
@@ -81,14 +84,52 @@ public class RSA extends Encryptor {
 	public RSA() {
 		System.out.println("Initializing..");
 
-		Utility utility = new Utility();
-		this.setP(11);
-		this.setQ(13);
-		this.setN(this.p * this.q);
-		this.setPhi((this.p - 1) * (this.q - 1));
-		this.setE(49);
-		this.setD(this.computePrivateKey());
+		this.initialize();
 		System.out.println(this);
+	}
+
+	private void initialize() {
+		Random random = new Random();
+		boolean arePrime;
+		Utility utility = new Utility();
+		boolean isDAppropriate = false;
+		while (!isDAppropriate) {
+			arePrime = false;
+			System.out.println("Finding Primes..");
+			while (!arePrime) {
+				this.p = random.nextInt(MAXIMUM_PRIME_VALUE-2) + 2;
+				this.q = random.nextInt(MAXIMUM_PRIME_VALUE-2) + 2;
+				arePrime = true;
+				for (int i = 2; i < this.p / 2; i++) {
+					if (this.p % i == 0)
+						arePrime = false;
+				}
+				for (int i = 2; i < this.q / 2; i++) {
+					if (this.q % i == 0)
+						arePrime = false;
+				}
+				if (p == q)
+					arePrime = false;
+				this.setN(this.p * this.q);
+
+				if (this.getN() <= ASCII_VALUE_COUNT)
+					arePrime = false;
+			}
+			System.out.println("p: " + p + " q: " + q);
+
+			this.setPhi((this.p - 1) * (this.q - 1));
+			this.setE(utility.findCoPrimeNumberLessThan(phi));
+
+			System.out.println("Finding private key..");
+
+			isDAppropriate = this.computePrivateKey();
+			;
+			if (!isDAppropriate) {
+				System.out.println(this);
+				System.out.println("private key Value too high");
+			}
+
+		}
 	}
 
 	@Override
@@ -96,7 +137,7 @@ public class RSA extends Encryptor {
 		return "RSA [p=" + p + ", q=" + q + ", n=" + n + ", phi=" + phi + ", e=" + e + ", d=" + d + "]";
 	}
 
-	private int computePrivateKey() {
+	private boolean computePrivateKey() {
 
 		boolean isRemainderOne = false;
 		int d = 2;
@@ -104,54 +145,55 @@ public class RSA extends Encryptor {
 
 			if ((d * this.e) % this.phi == 1) {
 				isRemainderOne = true;
-			}
-			else {
+			} else {
 				d++;
+				if (d > MAXIMUM_PRIVATE_KEY)
+					return false;
 			}
 		}
 
-		return d;
+		this.setD(d);
+		return true;
 	}
-	
-	public void computeEncryptedMessage()
-	{
+
+	public void computeEncryptedMessage() {
+		this.setEncryptedMessage("RSA|");
+
 		String message = this.message;
 		System.out.println("Encrypting..");
 
-		for(int i = 0; i < message.length(); i++) {
+		for (int i = 0; i < message.length(); i++) {
 			this.encryptedMessage = this.encryptedMessage.concat(this.getEncryptedValue(message.charAt(i)));
 			this.encryptedMessage = this.encryptedMessage.concat("|");
 		}
 		this.encryptedMessage = this.encryptedMessage.concat("end");
-		
+
 	}
-	
-	public void decryptEncryptedMessage() 
-	{
+
+	public void decryptEncryptedMessage() {
+		this.setDepcryptedMessage("");
 		String encryptedMessage = this.encryptedMessage.substring(4, this.encryptedMessage.length());
 		String part;
 		int position;
 		char depryptedChar;
 		Utility utility = new Utility();
 		System.out.println("Decrypting..");
-		
-		while(!encryptedMessage.equals("end")) {
-			part = "";
-			position=0;
 
-			while(encryptedMessage.charAt(position) != '|')
-			{
+		while (!encryptedMessage.equals("end")) {
+			part = "";
+			position = 0;
+
+			while (encryptedMessage.charAt(position) != '|') {
 				part = part.concat(Character.toString(encryptedMessage.charAt(position)));
 				position++;
 			}
 			encryptedMessage = encryptedMessage.substring(part.length() + 1, encryptedMessage.length());
-			
-			depryptedChar = (char) utility.moduloR(Integer.parseInt(part),this.d,this.n);
-			
-			this.depcryptedMessage =  this.depcryptedMessage.concat(Character.toString(depryptedChar));
+
+			depryptedChar = (char) utility.moduloR(Integer.parseInt(part), this.d, this.n);
+
+			this.depcryptedMessage = this.depcryptedMessage.concat(Character.toString(depryptedChar));
 		}
-		
-		
+
 	}
 
 	public String getDepcryptedMessage() {
@@ -163,7 +205,7 @@ public class RSA extends Encryptor {
 	}
 
 	private String getEncryptedValue(char character) {
-		
+
 		int asciiValue = (int) character;
 		Utility utility = new Utility();
 		return Integer.toString(utility.moduloR(asciiValue, this.e, this.n));
