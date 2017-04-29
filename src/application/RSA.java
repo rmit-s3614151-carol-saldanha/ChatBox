@@ -107,6 +107,7 @@ public class RSA extends Encryptor {
 		
 		this.setD(privateKey);
 		this.setN(n);
+		System.out.println("Computed private key and N"+this.d +" "+ this.n);
 	}
 	
 	private void initialize() {

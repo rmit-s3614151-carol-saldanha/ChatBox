@@ -179,7 +179,6 @@ public class AlgorithmController {
 		
 			String encryptedMsg = rsaFile.readFile("RSA.txt");
 			System.out.println(encryptedMsg);
-			rsa.setDepcryptedMessage("");
 			rsa.setEncryptedMessage(encryptedMsg);
 			rsa.decryptEncryptedMessage();
 			System.out.println(rsa.getDepcryptedMessage());
