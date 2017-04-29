@@ -10,13 +10,14 @@ public class Database {
 
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://localhost:8889/[insert database here]";
+	static final String DB_URL = "jdbc:mysql://localhost:8889/encryption";
+
 
 	// Database credentials
 	static final String USER = "root";
 	static final String PASS = "root";
-
-	public static void main(String[] args) {
+	void setDatabase() {
+ 
 		Connection conn = null;
 		Statement stmt = null;
 
@@ -31,7 +32,7 @@ public class Database {
 			stmt = conn.createStatement();
 			String sql;
 
-			sql = "[INSERT QUERY HERE]";
+			sql = "";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			// STEP 5: Extract data from result set
@@ -49,6 +50,7 @@ public class Database {
 			stmt.close();
 			conn.close();
 		} catch (SQLException se) {
+				System.out.println(se.getMessage());
 			System.out.println("SQL Exception occured. Please contaact admin : nirajbohra@gmail.com");
 		} catch (Exception e) {
 			// Handle errors for Class.forName
@@ -68,6 +70,7 @@ public class Database {
 			catch (SQLException se) {
 				se.printStackTrace();
 			} 
-		} 
+		}
 	}
+	
 }

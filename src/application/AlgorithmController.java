@@ -43,7 +43,8 @@ public class AlgorithmController {
 
 	@FXML
 	private Button readNewMsg;
-
+	private int e;
+	private int n;
 	private FileHandle rsaFile = null;
 
 	public void validate() {
@@ -84,9 +85,11 @@ public class AlgorithmController {
 			key = rsaFile.readFile("RSA.txt"); // READ KEY FROM FILE
 
 			if (key.contains("key")) {
+				computeEandN(key);
+				rsa.computePrivateKey(this.n, this.e);
 				rsaFile.writeToFile("ACK.txt", "ACK"); // ACK KEY RECEIVED
 				System.out.println("Key received, acknowledgement sent..");
-
+				
 				break;
 			}
 		}
@@ -101,6 +104,30 @@ public class AlgorithmController {
 			}
 		}
 	}
+
+	private void computeEandN(String key) {
+		
+		int firstD = 0;
+		int secondD = 0;
+		for(int i = 0; i < key.length() ; i++)
+		{
+			if(key.charAt(i) == '|'){
+				firstD = i;
+				break;
+			}
+		}
+		for(int i = firstD + 1; i < key.length() ; i++)
+		{
+			if(key.charAt(i) == '|'){
+				secondD = i;
+				break;
+			}
+		}
+		
+		this.e = Integer.parseInt(key.substring(firstD+1, secondD));
+		this.n = Integer.parseInt(key.substring(secondD+1, key.length()));
+	}
+
 
 	private void writePublicKey() {
 		String n;
