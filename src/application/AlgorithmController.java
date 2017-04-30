@@ -123,7 +123,7 @@ public class AlgorithmController {
 			if (key.contains("key")) {
 
 				computeYandGandP(key);
-				el.generateK(this.y, this.g);
+				el.generateK(this.y, this.p);
 				el.setyReceived(this.y);
 				el.setGeneratorReceived(this.g);
 				el.setPrimeNumberReceived(p);
