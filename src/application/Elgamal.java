@@ -50,7 +50,7 @@ public class Elgamal {
 	private int r = 0;
 	private String encryptedMessage;
 	private String depcryptedMessage;
-private int minimum = 1;
+	private int minimum = 1;
 	private final int GRANGE = maximum - minimum + 1;
 	private final int PRANGE = pMax - minimum + 1;
 	Random rand = new Random();
