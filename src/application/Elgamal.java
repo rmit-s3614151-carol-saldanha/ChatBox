@@ -174,6 +174,7 @@ private int minimum = 1;
 		this.setEncryptedMessage("Elgamal|"+c1+"|");
 		String message = msg;
 		System.out.println("Encrypting..");
+		System.out.println("Encrypting using "+ this.getGeneratorReceived() +" "+ getR()+" "+this.getPrimeNumberReceived());
 
 		for (int i = 0; i < message.length(); i++) {
 			this.encryptedMessage = this.encryptedMessage.concat(this.getEncryptedValue(message.charAt(i)));
@@ -197,14 +198,18 @@ private int minimum = 1;
 
 		int dKey = utility.moduloR(extractC1(), getPrivate_key(), getPrimeNumber());
 		int inverseValue = utility.inverseModulo(dKey, getPrimeNumber());
-
+		System.out.println("Decrypting using " +getPrivate_key()+" "+getPrimeNumber()+" ");
+		
 		this.setDepcryptedMessage("");
-		String encryptedMessage = this.encryptedMessage.substring(8, this.encryptedMessage.length());
+		String encryptedMessage = this.encryptedMessage;
 
 		String part;
 		int position;
 		int decryptedValue;
 		char decryptedChar;
+		
+		System.out.println(encryptedMessage);
+		
 		while (!encryptedMessage.equals("end")) {
 			part = "";
 			position = 0;
@@ -232,12 +237,11 @@ private int minimum = 1;
 		String part = "";
 		int position = 0;
 		while (msg.charAt(position) != '|') {
-			part = part.concat(Character.toString(encryptedMessage.charAt(position)));
+			part = part.concat(Character.toString(msg.charAt(position)));
 
 			position++;
 		}
-		
-		
+		this.encryptedMessage = msg.substring(position + 1, msg.length());
 		return Integer.parseInt(part);
 	}
 
