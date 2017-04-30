@@ -151,7 +151,7 @@ public class AlgorithmController {
 		}
 
 		this.y = Integer.parseInt(key.substring(firstD + 1, secondD));
-		this.p = Integer.parseInt(key.substring(secondD + 1, key.length()));
+		this.p = Integer.parseInt(key.substring(secondD + 1, thirdD));
 		this.g = Integer.parseInt(key.substring(thirdD + 1, key.length()));
 	}
 
