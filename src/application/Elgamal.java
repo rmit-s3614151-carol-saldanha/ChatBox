@@ -156,12 +156,13 @@ private int minimum = 1;
 	}
 
 	// Key that Alice uses to computeEncryption
-	public void generateK(int Y, int P) {
+	public void generateK(int y, int p) {
 		// Alice selects random number r ;
 		int r = rand.nextInt(100) + 1;
-		int k = utility.moduloR(Y, r, P);
+		int k = utility.moduloR(y, r, p);
 		setValueK(k);
 		setR(r);
+		System.out.println("K "+ k + "Y "+ y+ "P" + p);
 
 	}
 
