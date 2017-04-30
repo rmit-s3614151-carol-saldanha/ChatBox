@@ -269,7 +269,7 @@ public class AlgorithmController {
 
 		} else {
 			this.encryptionType = RSA_ENCRYPTION;
-
+			System.out.println(this.encryptionType);
 		}
 
 	}
