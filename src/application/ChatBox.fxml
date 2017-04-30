@@ -8,10 +8,10 @@
 
 <AnchorPane prefHeight="600" prefWidth="600" style="-fx-background-color: #99ff99;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AlgorithmController">
    <children>
-      <Button fx:id="RSA" layoutX="80.0" layoutY="287.0" mnemonicParsing="false" onAction="#onClickRSA" text="RSA" />
-      <Button fx:id="Paillier" layoutX="278.0" layoutY="287.0" mnemonicParsing="false" onAction="#onClickPaillier" text="Paillier" />
-      <Button fx:id="elgamal" layoutX="470.0" layoutY="287.0" mnemonicParsing="false" onAction="#onClickElegmal" text="elgamal" />
-      <TextArea fx:id="msgBox1" layoutX="93.0" layoutY="77.0" prefHeight="200.0" prefWidth="415.0" promptText="Senders Message" />
+      <Button fx:id="RSA" layoutX="71.0" layoutY="47.0" mnemonicParsing="false" onAction="#onClickRSA" text="RSA" />
+      <Button fx:id="Paillier" layoutX="278.0" layoutY="47.0" mnemonicParsing="false" onAction="#onClickPaillier" text="Paillier" />
+      <Button fx:id="elgamal" layoutX="465.0" layoutY="47.0" mnemonicParsing="false" onAction="#onClickElegmal" text="elgamal" />
+      <TextArea fx:id="msgBox1" layoutX="100.0" layoutY="81.0" prefHeight="200.0" prefWidth="415.0" promptText="Senders Message" />
       <TextArea fx:id="msgBox2" layoutX="100.0" layoutY="349.0" prefHeight="200.0" prefWidth="415.0" promptText="Receivers message" />
       <Button fx:id="readNewMsg" layoutX="232.0" layoutY="559.0" mnemonicParsing="false" onAction="#onClickRead" text="Read new Message" />
       <TextField fx:id="name" layoutX="41.0" layoutY="14.0" promptText="Enter your name" />
@@ -19,5 +19,6 @@
       <Button fx:id="start" layoutX="389.0" layoutY="14.0" mnemonicParsing="false" onAction="#onClickStart" text="Start Chat" />
       <Label fx:id="label" layoutX="93.0" layoutY="50.0" prefHeight="20.0" prefWidth="405.0" textFill="#da1616" />
       <Button layoutX="486.0" layoutY="14.0" mnemonicParsing="false" onAction="#onClickExit" text="Exit" />
+      <Button layoutX="238.0" layoutY="300.0" mnemonicParsing="false" onAction="#onClickSend" text="Send New Message" />
    </children>
 </AnchorPane>

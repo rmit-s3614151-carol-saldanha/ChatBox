@@ -64,6 +64,26 @@ public class AlgorithmController {
 
 	}
 
+	public void onClickSend(ActionEvent event) {
+		if (name.getText().isEmpty() || ipAddress.getText().isEmpty()) {
+			validate();
+
+		} else {
+
+			switch (this.encryptionType) {
+			case RSA_ENCRYPTION:
+				this.sendRSAMsg();
+				break;
+			case ELG_ENCRYPTION:
+				this.sendELGMsg();
+				break;
+			default:
+				;
+			}
+
+		}
+	}
+
 	public void onClickExit(ActionEvent event) {
 		FileHandle exit = new FileHandle();
 		exit.writeToFile("RSA.txt", "empty");
@@ -249,12 +269,16 @@ public class AlgorithmController {
 
 		} else {
 			this.encryptionType = RSA_ENCRYPTION;
-			rsa.setMessage(name.getText() + ": " + msgBox1.getText());
-			rsa.computeEncryptedMessage();
-			System.out.println("New message: " + rsa.getEncryptedMessage());
-			fileHandle.writeToFile("RSA.txt", rsa.getEncryptedMessage());
+
 		}
 
+	}
+
+	public void sendRSAMsg() {
+		rsa.setMessage(name.getText() + ": " + msgBox1.getText());
+		rsa.computeEncryptedMessage();
+		System.out.println("New message: " + rsa.getEncryptedMessage());
+		fileHandle.writeToFile("RSA.txt", rsa.getEncryptedMessage());
 	}
 
 	public void onClickPaillier(ActionEvent event) {
@@ -268,16 +292,21 @@ public class AlgorithmController {
 
 		} else {
 			this.encryptionType = ELG_ENCRYPTION;
-			el.computeEncryption(name.getText() + ": " + msgBox1.getText());
-			System.out.println("New message: " + el.getEncryptedMessage());
-			fileHandle.writeToFile("ELG.txt", el.getEncryptedMessage());
+
 		}
 
+	}
+
+	public void sendELGMsg() {
+		el.computeEncryption(name.getText() + ": " + msgBox1.getText());
+		System.out.println("New message: " + el.getEncryptedMessage());
+		fileHandle.writeToFile("ELG.txt", el.getEncryptedMessage());
 	}
 
 	public void onClickRead(ActionEvent event) {
 
 		if (this.encryptionType == RSA_ENCRYPTION) {
+			System.out.println("RSA Reading");
 			String encryptedMsg = fileHandle.readFile("RSA.txt");
 			System.out.println(encryptedMsg);
 			rsa.setEncryptedMessage(encryptedMsg);
