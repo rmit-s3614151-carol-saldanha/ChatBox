@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 public class AlgorithmController {
 
 	private RSA rsa = new RSA();
+	private Elgamal el = new Elgamal();
 
 	@FXML
 	private Button RSA;
@@ -172,7 +173,22 @@ public class AlgorithmController {
 	}
 
 	public void onClickElegmal(ActionEvent event) {
-		System.out.println("Elegmal");
+		
+		if (name.getText().isEmpty() || ipAddress.getText().isEmpty()) {
+			validate();
+
+		} else {
+			el.generateY();
+			el.setMessage(name.getText() + ": " + msgBox1.getText());
+			el.setEncryptedMessage("RSA|");
+			el.computeEncryption();
+			System.out.println("New message: " + rsa.getEncryptedMessage());
+			//rsaFile.writeToFile("Elgamal.txt", rsa.getEncryptedMessage());
+		}
+		
+		
+		
+
 	}
 
 	public void onClickRead(ActionEvent event) {
