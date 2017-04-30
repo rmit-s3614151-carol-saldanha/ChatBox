@@ -190,7 +190,7 @@ private int minimum = 1;
 
 		int asciiValue = (int) character;
 		// Calculate CTWO : M * K % P
-		int c2 = (asciiValue * getValueK()) % getPrimeNumber();
+		int c2 = (asciiValue * getValueK()) % this.getPrimeNumberReceived();
 
 		return Integer.toString(c2);
 	}
