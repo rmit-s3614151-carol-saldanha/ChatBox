@@ -269,7 +269,7 @@ public class AlgorithmController {
 
 		} else {
 			this.encryptionType = RSA_ENCRYPTION;
-			System.out.println(this.encryptionType);
+			System.out.println("RSA ENCRYPTION SET");
 		}
 
 	}
@@ -292,7 +292,7 @@ public class AlgorithmController {
 
 		} else {
 			this.encryptionType = ELG_ENCRYPTION;
-
+			System.out.println("ELEGMAL ENCRYPTION SET");
 		}
 
 	}
