@@ -1,8 +1,5 @@
 package application;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,6 +11,9 @@ public class AlgorithmController {
 
 	private RSA rsa = new RSA();
 	private Elgamal el = new Elgamal();
+	private final int RSA_ENCRYPTION = 1;
+	private final int ELG_ENCRYPTION = 2;
+	private int encryptionType = 0;
 
 	@FXML
 	private Button RSA;
@@ -44,9 +44,15 @@ public class AlgorithmController {
 
 	@FXML
 	private Button readNewMsg;
+
+	// RSA
 	private int e;
 	private int n;
-	private FileHandle rsaFile = null;
+	// ELG
+	private int y;
+	private int p;
+	private int g;
+	private FileHandle fileHandle = null;
 
 	public void validate() {
 
@@ -57,28 +63,100 @@ public class AlgorithmController {
 		label.setText("Enter your name and the Ip Address of the person you want to chat with");
 
 	}
+
 	public void onClickExit(ActionEvent event) {
 		FileHandle exit = new FileHandle();
 		exit.writeToFile("RSA.txt", "empty");
 		exit.writeToFile("ACK.txt", "empty");
+		exit.writeToFile("ELG.txt", "empty");
+		exit.writeToFile("ACKELG.txt", "empty");
 		System.exit(0);
 	}
+
 	public void onClickStart(ActionEvent event) {
 		if (name.getText().isEmpty() || ipAddress.getText().isEmpty()) {
 			validate();
 
 		} else {
-			this.rsaFile = new FileHandle(ipAddress.getText());
-			
-			establishConnection();
+			this.fileHandle = new FileHandle(ipAddress.getText());
+
+			establishRSAConnection();
+			establishELGConnection();
 
 			enableChat();
 
 		}
 	}
 
-	private void establishConnection() {
-		System.out.println("Establishing Connection..");
+	private void establishELGConnection() {
+		System.out.println("Establishing Elegmal Connection..");
+
+		writeELGPublicKey(); // WRITE KEY FOR PUBLIC
+
+		String key;
+		String ack;
+
+		System.out.println("Reading Public key..");
+
+		while (fileHandle.readFile("ELG.txt") != null) {
+			key = fileHandle.readFile("ELG.txt"); // READ KEY FROM FILE
+			if (key.contains("key")) {
+
+				computeYandGandP(key);
+				el.generateK(this.y, this.g);
+				el.setyReceived(this.y);
+				el.setGeneratorReceived(this.g);
+				el.setPrimeNumberReceived(p);
+
+				fileHandle.writeToFile("ACKELG.txt", "ACK"); // ACK KEY RECEIVED
+				System.out.println("Key received, acknowledgement sent..");
+
+				break;
+			}
+		}
+
+		System.out.println("Waiting for Acknowledgement..");
+
+		while (fileHandle.readFile("ACKELG.txt") != null) {
+			ack = fileHandle.readFile("ACKELG.txt");
+			if (ack.contains("ACK")) {
+				System.out.println("ELG CONNECTION ESTABLISHED.."); // CONNECTION
+																	// ESTABLISHED
+				break;
+			}
+		}
+	}
+
+	private void computeYandGandP(String key) {
+		int firstD = 0;
+		int secondD = 0;
+		int thirdD = 0;
+		for (int i = 0; i < key.length(); i++) {
+			if (key.charAt(i) == '|') {
+				firstD = i;
+				break;
+			}
+		}
+		for (int i = firstD + 1; i < key.length(); i++) {
+			if (key.charAt(i) == '|') {
+				secondD = i;
+				break;
+			}
+		}
+		for (int i = secondD + 1; i < key.length(); i++) {
+			if (key.charAt(i) == '|') {
+				thirdD = i;
+				break;
+			}
+		}
+
+		this.y = Integer.parseInt(key.substring(firstD + 1, secondD));
+		this.p = Integer.parseInt(key.substring(secondD + 1, key.length()));
+		this.g = Integer.parseInt(key.substring(thirdD + 1, key.length()));
+	}
+
+	private void establishRSAConnection() {
+		System.out.println("Establishing RSA Connection..");
 
 		writePublicKey(); // WRITE KEY FOR PUBLIC
 
@@ -87,62 +165,73 @@ public class AlgorithmController {
 
 		System.out.println("Reading Public key..");
 
-		while (rsaFile.readFile("RSA.txt") != null) {
-			key = rsaFile.readFile("RSA.txt"); // READ KEY FROM FILE
+		while (fileHandle.readFile("RSA.txt") != null) {
+			key = fileHandle.readFile("RSA.txt"); // READ KEY FROM FILE
 			if (key.contains("key")) {
 
 				computeEandN(key);
 				rsa.computePrivateKey(this.n, this.e);
 
-				rsaFile.writeToFile("ACK.txt", "ACK"); // ACK KEY RECEIVED
+				fileHandle.writeToFile("ACK.txt", "ACK"); // ACK KEY RECEIVED
 				System.out.println("Key received, acknowledgement sent..");
-				
+
 				break;
 			}
 		}
 
 		System.out.println("Waiting for Acknowledgement..");
 
-		while (rsaFile.readFile("ACK.txt") != null) {
-			ack = rsaFile.readFile("ACK.txt");
+		while (fileHandle.readFile("ACK.txt") != null) {
+			ack = fileHandle.readFile("ACK.txt");
 			if (ack.contains("ACK")) {
-				System.out.println("CONNECTION ESTABLISHED.."); // CONNECTION ESTABLISHED
+				System.out.println("RSA CONNECTION ESTABLISHED.."); // CONNECTION
+																	// ESTABLISHED
 				break;
 			}
 		}
 	}
 
 	private void computeEandN(String key) {
-		
+
 		int firstD = 0;
 		int secondD = 0;
-		for(int i = 0; i < key.length() ; i++)
-		{
-			if(key.charAt(i) == '|'){
+		for (int i = 0; i < key.length(); i++) {
+			if (key.charAt(i) == '|') {
 				firstD = i;
 				break;
 			}
 		}
-		for(int i = firstD + 1; i < key.length() ; i++)
-		{
-			if(key.charAt(i) == '|'){
+		for (int i = firstD + 1; i < key.length(); i++) {
+			if (key.charAt(i) == '|') {
 				secondD = i;
 				break;
 			}
 		}
-		
-		this.e = Integer.parseInt(key.substring(firstD+1, secondD));
-		this.n = Integer.parseInt(key.substring(secondD+1, key.length()));
-	}
 
+		this.e = Integer.parseInt(key.substring(firstD + 1, secondD));
+		this.n = Integer.parseInt(key.substring(secondD + 1, key.length()));
+	}
 
 	private void writePublicKey() {
 		String n;
 		String e;
 		e = Integer.toString(rsa.getE());
-		n = Integer.toString(rsa.getnEncryption() );
+		n = Integer.toString(rsa.getnEncryption());
 		String publicKey = "key" + "|" + e + "|" + n;
-		rsaFile.writeToFile("RSA.txt", publicKey); // WRITE KEY TO FILE
+		fileHandle.writeToFile("RSA.txt", publicKey); // WRITE KEY TO FILE
+
+	}
+
+	private void writeELGPublicKey() {
+		String y;
+		String p;
+		String g;
+
+		y = Integer.toString(el.getValueY());
+		p = Integer.toString(el.getPrimeNumber());
+		g = Integer.toString(el.getGenerator());
+		String publicKey = "key" + "|" + y + "|" + p + "|" + g;
+		fileHandle.writeToFile("ELG.txt", publicKey); // WRITE KEY TO FILE
 
 	}
 
@@ -159,11 +248,11 @@ public class AlgorithmController {
 			validate();
 
 		} else {
+			this.encryptionType = RSA_ENCRYPTION;
 			rsa.setMessage(name.getText() + ": " + msgBox1.getText());
-			rsa.setEncryptedMessage("RSA|");
 			rsa.computeEncryptedMessage();
 			System.out.println("New message: " + rsa.getEncryptedMessage());
-			rsaFile.writeToFile("RSA.txt", rsa.getEncryptedMessage());
+			fileHandle.writeToFile("RSA.txt", rsa.getEncryptedMessage());
 		}
 
 	}
@@ -173,33 +262,36 @@ public class AlgorithmController {
 	}
 
 	public void onClickElegmal(ActionEvent event) {
-		
+
 		if (name.getText().isEmpty() || ipAddress.getText().isEmpty()) {
 			validate();
 
 		} else {
-			el.generateY();
-			el.setMessage(name.getText() + ": " + msgBox1.getText());
-			el.setEncryptedMessage("RSA|");
-			el.computeEncryption();
-			System.out.println("New message: " + rsa.getEncryptedMessage());
-			//rsaFile.writeToFile("Elgamal.txt", rsa.getEncryptedMessage());
+			this.encryptionType = ELG_ENCRYPTION;
+			el.computeEncryption(name.getText() + ": " + msgBox1.getText());
+			System.out.println("New message: " + el.getEncryptedMessage());
+			fileHandle.writeToFile("ELG.txt", el.getEncryptedMessage());
 		}
-		
-		
-		
 
 	}
 
 	public void onClickRead(ActionEvent event) {
-		
-			String encryptedMsg = rsaFile.readFile("RSA.txt");
+
+		if (this.encryptionType == RSA_ENCRYPTION) {
+			String encryptedMsg = fileHandle.readFile("RSA.txt");
 			System.out.println(encryptedMsg);
 			rsa.setEncryptedMessage(encryptedMsg);
 			rsa.decryptEncryptedMessage();
 			System.out.println(rsa.getDepcryptedMessage());
 			msgBox2.appendText("\n" + rsa.getDepcryptedMessage());
-		
+		} else if (this.encryptionType == ELG_ENCRYPTION) {
+			String encryptedMsg = fileHandle.readFile("ELG.txt");
+			System.out.println(encryptedMsg);
+			el.setEncryptedMessage(encryptedMsg);
+			el.decrypt();
+			System.out.println(el.getDepcryptedMessage());
+			msgBox2.appendText("\n" + el.getDepcryptedMessage());
+		}
 	}
 
 }
