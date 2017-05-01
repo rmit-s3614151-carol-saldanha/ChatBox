@@ -17,6 +17,25 @@ public class Utility {
 			return (moduloR((moduloR(a, 1, c) * moduloR(a, b - 1, c)), 1, c));
 		}
 	}
+	
+	public int inverseModulo(int a,int b)
+	{
+		boolean isRemainderOne = false;
+		int i = 2;
+		while (!isRemainderOne) {
+
+			if ((i * a) % b == 1) {
+				isRemainderOne = true;
+				return i;
+			} else {
+				i++;
+				isRemainderOne = false;
+			}
+		}
+		return i;
+
+		
+	}
 
 	public int findCoPrimeNumberLessThan(int phi) {
 		int e = 0;
@@ -71,14 +90,5 @@ public class Utility {
 		}
 		return true;
 
-	}
-	public int inverseModulo(int a , int b ){
-		a %= b;
-	    for (int x = 1; x < b; x++) {
-	        if ((a*x)%b == 1) {
-	            return x;
-	        }
-	    }
-		return 0;
 	}
 }

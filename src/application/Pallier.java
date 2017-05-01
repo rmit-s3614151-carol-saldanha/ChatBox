@@ -20,8 +20,8 @@ public class Pallier {
 	private int MAX_LCM;
 	private int MIN_LCM;
 	private int l;
-	private final int MAXIMUM_PRIME_VALUE = 20;
-	private final int ASCII_VALUE_COUNT = 127;
+	private final int MAXIMUM_G_VALUE = 100;
+	private final int R = 3;
 
 	Utility utility = new Utility();
 
@@ -132,47 +132,33 @@ public class Pallier {
 	public Pallier() {
 		System.out.println("Initializing..");
 
-		//this.initialize();
+		this.initialize();
 		System.out.println(this);
 	}
 
 	public int computePrivateKey() {
 		Utility utility = new Utility();
+
 		return this.miu = utility.inverseModulo(this.k, this.n);
 
 	}
-	
-	public void computePrivateKey(int n, int g)
-	{
+
+	public void computePrivateKey(int n, int g) {
 		Random random = new Random();
 		Utility utility = new Utility();
 		int privateKey = 2;
-		int p=utility.findPrimeFactor(n);
-		int q = n/p;
-		setLamda(computeLcm(p - 1,q - 1));
-		System.out.println("lamda:" + lamda);
-		
-		this.setG(3);
-		boolean checkGcd = false;
-		while (!checkGcd) {
-			if (computeGcd(g, (int) Math.pow(n, 2)) != 1) {
-				setG(random.nextInt(n));
-				checkGcd = true;
-				break;
-			} else {
-				checkGcd = false;
-				break;
-			}
+		int p = utility.findPrimeFactor(n);
+		int q = n / p;
+		setLamda(computeLcm(p - 1, q - 1));
+		this.setG(random.nextInt(100));
 
-		}
-		
-		computeK(g,n);
+		computeK(this.g, this.n);
 		System.out.println("k:" + k);
-		int miu = utility.inverseModulo(k,n);
-		
+		this.miu = utility.inverseModulo(this.k, this.n);
+
 		this.setLamda(lamda);
 		this.setMiu(miu);
-		System.out.println("Computed private key and Lamda"+this.miu +" "+ this.lamda);
+
 	}
 
 	public int computeGcd(int a, int b) {
@@ -205,80 +191,38 @@ public class Pallier {
 	}
 
 	public int computeK(int g, int n) {
-		this.l = utility.moduloR(this.g, this.lamda, (int) Math.pow(this.n, 2));
+		this.l = utility.moduloR(this.g, this.lamda, this.n * this.n);
+		return this.k = (this.l - 1) / n;
+	}
+
+	public int computeDecryptedK(int c, int n) {
+		this.l = utility.moduloR(c, this.lamda, this.n * this.n);
 		return this.k = (this.l - 1) / n;
 	}
 
 	private void initialize() {
 
-		Random random = new Random();
-		boolean arePrime;
-		Utility utility = new Utility();
-		boolean isDAppropriate = false;
-		arePrime = false;
-			while (!arePrime) {
-				this.p = random.nextInt(MAXIMUM_PRIME_VALUE - 2) + 2;
-				this.q = random.nextInt(MAXIMUM_PRIME_VALUE - 2) + 2;
-				arePrime = true;
-				for (int i = 2; i < this.p / 2; i++) {
-					if (this.p % i == 0)
-						arePrime = false;
-				}
-				for (int i = 2; i < this.q / 2; i++) {
-					if (this.q % i == 0)
-						arePrime = false;
-				}
-				if (p == q) {
-					arePrime = false;
-				} else if (computeGcd(this.p * this.q, (this.p - 1) * (this.q - 1)) != 1) {
-					arePrime = false;
-				}
-				this.setN(this.p * this.q);
-				this.setnEncryption(this.p * this.q);
+		this.setP(19);
+		this.setQ(7);
+		this.setN(this.p * this.q);
+		this.setnEncryption(this.p * this.q);
+		System.out.println("p: " + p + " q: " + q);
+		this.setG(3);
+		setLamda(computeLcm(this.p - 1, this.q - 1));
+		computeK(this.g, this.n);
+		this.setMiu(computePrivateKey());
 
-				if (this.getnEncryption() <= ASCII_VALUE_COUNT)
-					arePrime = false;
-			}
-			System.out.println("p: " + p + " q: " + q);
-
-			this.setG(3);
-			boolean checkGcd = false;
-			while (!checkGcd) {
-				if (computeGcd(this.g, (int) Math.pow(this.n, 2)) != 1) {
-					this.setG(random.nextInt(this.n));
-					checkGcd = true;
-					break;
-				} else {
-					checkGcd = false;
-					break;
-				}
-
-			}
-			System.out.println("g: " + g);
-			setLamda(computeLcm(this.p - 1, this.q - 1));
-			System.out.println("lamda:" + lamda);
-
-			computeK(this.g, this.n);
-			System.out.println("k:" + k);
-			
-			this.setMiu(computePrivateKey());
-			System.out.println("Private key" + this.miu);
-			
-			this.computeEncryptedMessage();
-			this.decryptEncryptedMessage();
-			
-}
-	
-
-
+	}
 
 	private String getEncryptedValue(char character) {
 
 		int asciiValue = (int) character;
 		Utility utility = new Utility();
-		return Integer.toString(utility.moduloR(utility.moduloR(g,asciiValue, (int) Math.pow(n, 2)) * utility.moduloR(3,n, (int) Math.pow(n, 2)),1, (int) Math.pow(n, 2)));
+		return Integer.toString(utility.moduloR(
+				utility.moduloR(g, asciiValue, this.n * this.n) * utility.moduloR(R, n, this.n * this.n), 1,
+				this.n * this.n));
 	}
-	
+
 	public void computeEncryptedMessage() {
 		this.setEncryptedMessage("Pallier|");
 
@@ -292,16 +236,18 @@ public class Pallier {
 		this.encryptedMessage = this.encryptedMessage.concat("end");
 
 	}
-	
+
 	public void decryptEncryptedMessage() {
 		this.setDepcryptedMessage("");
-		String encryptedMessage = this.encryptedMessage.substring(4, this.encryptedMessage.length());
+		String encryptedMessage = this.encryptedMessage.substring(8, this.encryptedMessage.length());
 		String part;
 		int position;
+		int decryptedK;
 		char decryptedChar;
 		Utility utility = new Utility();
 		System.out.println("Decrypting..");
-		System.out.println("lamda "+ this.lamda+" n "+ this.nDecryption);
+		System.out.println("lamda " + this.lamda + " n " + this.n);
+		System.out.println(this.encryptedMessage);
 		while (!encryptedMessage.equals("end")) {
 			part = "";
 			position = 0;
@@ -312,18 +258,20 @@ public class Pallier {
 			}
 			encryptedMessage = encryptedMessage.substring(part.length() + 1, encryptedMessage.length());
 
-			computeK((char) utility.moduloR(Integer.parseInt(part), this.lamda, (int) Math.pow(this.nDecryption, 2)),this.nDecryption);
+			decryptedK = this.computeDecryptedK(Integer.parseInt(part), n);
 
-			decryptedChar = (char) utility.moduloR(this.k * this.miu , 1, this.nDecryption) ;
+			decryptedChar = (char) utility.moduloR(
+					(utility.moduloR(this.miu, 1, this.n) * utility.moduloR(decryptedK, 1, this.n)), 1, this.n);
 			this.depcryptedMessage = this.depcryptedMessage.concat(Character.toString(decryptedChar));
+
 		}
+		System.out.println("Encrypted message  :  " + getEncryptedMessage());
+		System.out.println(this.getDepcryptedMessage());
 
 	}
 
-
-
 	public static void main(String[] args) {
-		
+
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter a msg");
 		String msg = sc.nextLine();
@@ -332,6 +280,6 @@ public class Pallier {
 		p.initialize();
 		p.computeEncryptedMessage();
 		p.decryptEncryptedMessage();
-		
+
 	}
 }
